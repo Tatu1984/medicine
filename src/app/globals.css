@@ -1,0 +1,145 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-heading);
+
+  /* Brand palette — Modern & humane */
+  --color-sage: var(--sage);
+  --color-sage-soft: var(--sage-soft);
+  --color-sage-deep: var(--sage-deep);
+  --color-clay: var(--clay);
+  --color-clay-soft: var(--clay-soft);
+  --color-cream: var(--cream);
+  --color-ink: var(--ink);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.4);
+}
+
+:root {
+  --radius: 1.1rem;
+
+  /* Brand */
+  --cream: oklch(0.985 0.011 92);
+  --ink: oklch(0.27 0.028 158);
+  --sage: oklch(0.52 0.066 157);
+  --sage-soft: oklch(0.93 0.026 152);
+  --sage-deep: oklch(0.37 0.05 159);
+  --clay: oklch(0.63 0.123 46);
+  --clay-soft: oklch(0.92 0.045 60);
+
+  --background: oklch(0.985 0.011 92);
+  --foreground: oklch(0.27 0.028 158);
+  --card: oklch(0.997 0.006 95);
+  --card-foreground: oklch(0.27 0.028 158);
+  --popover: oklch(0.997 0.006 95);
+  --popover-foreground: oklch(0.27 0.028 158);
+  --primary: oklch(0.52 0.066 157);
+  --primary-foreground: oklch(0.985 0.011 92);
+  --secondary: oklch(0.95 0.018 95);
+  --secondary-foreground: oklch(0.37 0.05 159);
+  --muted: oklch(0.952 0.014 95);
+  --muted-foreground: oklch(0.49 0.022 155);
+  --accent: oklch(0.92 0.045 60);
+  --accent-foreground: oklch(0.42 0.12 46);
+  --destructive: oklch(0.577 0.18 27);
+  --border: oklch(0.9 0.016 92);
+  --input: oklch(0.9 0.016 92);
+  --ring: oklch(0.52 0.066 157);
+  --chart-1: oklch(0.52 0.066 157);
+  --chart-2: oklch(0.63 0.123 46);
+  --chart-3: oklch(0.37 0.05 159);
+  --chart-4: oklch(0.7 0.09 80);
+  --chart-5: oklch(0.6 0.07 200);
+}
+
+.dark {
+  --cream: oklch(0.22 0.018 158);
+  --ink: oklch(0.95 0.012 95);
+  --sage: oklch(0.66 0.072 157);
+  --sage-soft: oklch(0.32 0.04 157);
+  --sage-deep: oklch(0.8 0.05 159);
+  --clay: oklch(0.7 0.12 48);
+  --clay-soft: oklch(0.34 0.06 50);
+
+  --background: oklch(0.2 0.016 158);
+  --foreground: oklch(0.95 0.012 95);
+  --card: oklch(0.24 0.02 158);
+  --card-foreground: oklch(0.95 0.012 95);
+  --popover: oklch(0.24 0.02 158);
+  --popover-foreground: oklch(0.95 0.012 95);
+  --primary: oklch(0.66 0.072 157);
+  --primary-foreground: oklch(0.2 0.016 158);
+  --secondary: oklch(0.28 0.022 158);
+  --secondary-foreground: oklch(0.95 0.012 95);
+  --muted: oklch(0.28 0.022 158);
+  --muted-foreground: oklch(0.72 0.02 150);
+  --accent: oklch(0.34 0.06 50);
+  --accent-foreground: oklch(0.85 0.09 60);
+  --destructive: oklch(0.7 0.17 27);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.66 0.072 157);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  html {
+    @apply font-sans scroll-smooth;
+  }
+  h1, h2, h3, h4 {
+    @apply font-heading tracking-tight;
+  }
+}
+
+@layer utilities {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .grain {
+    background-image: radial-gradient(currentColor 0.5px, transparent 0.5px);
+    background-size: 14px 14px;
+  }
+}
