@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rational Medicine
 
-## Getting Started
+The online platform for **Dr Rahul Mukherjee's** concept of *Rational Medicine* — improving
+healthcare quality while driving down cost by preventing overdiagnosis and overtreatment — and a
+home for publishing his research.
 
-First, run the development server:
+- **Stack:** Next.js 16 (App Router) · React 19 · Tailwind v4 · shadcn (Base UI) · Prisma 7 +
+  Neon Postgres · Vercel Blob · motion (reactbits-style animations)
+- **Design:** "Modern & humane" — warm cream canvas, sage + clay palette
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Public site
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`/` home · `/pillars` · `/research` · `/research/[slug]` (article pages) · `/network` ·
+`/resources` · `/about` · `/contact`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Admin (research publishing)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+A private area for a single admin (Dr Mukherjee) to publish research as **both a webpage and a
+downloadable PDF**.
 
-## Learn More
+- `/admin/login` — email + password sign in
+- `/admin` — dashboard (list / publish / unpublish / edit / delete)
+- `/admin/articles/new` & `/admin/articles/[id]/edit` — write the article in Markdown (with live
+  preview) and upload a PDF (stored in Vercel Blob)
 
-To learn more about Next.js, take a look at the following resources:
+Access is protected by `src/proxy.ts` (Next.js 16 proxy/middleware) using a signed JWT cookie.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Install** (also runs `prisma generate`):
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+2. **Environment** — copy `.env.example` to `.env` and fill in:
+   - `DATABASE_URL` — your Neon pooled connection string
+   - `ADMIN_EMAIL` / `ADMIN_PASSWORD` — the single admin's login
+   - `SESSION_SECRET` — any long random string (32+ chars)
+   - `BLOB_READ_WRITE_TOKEN` — from Vercel → Storage → Blob
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Create the database tables**:
+   ```bash
+   npm run db:migrate      # first run: name it e.g. "init"
+   npm run db:seed         # optional: loads Dr Mukherjee's existing publications
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Run**:
+   ```bash
+   npm run dev             # http://localhost:3000
+   ```
+
+## Deploy (Vercel)
+
+Set the four env vars in the Vercel project, add a **Blob** store, and use a **Neon** Postgres
+database. The build runs `prisma generate`; run `npm run db:deploy` (or `prisma migrate deploy`)
+against the production database to apply migrations.
+
+## Useful scripts
+
+| Script | What it does |
+|---|---|
+| `npm run db:migrate` | Create/apply a dev migration |
+| `npm run db:deploy` | Apply migrations in production |
+| `npm run db:seed` | Seed the existing publications |
+| `npm run db:studio` | Open Prisma Studio |

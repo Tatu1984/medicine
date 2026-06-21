@@ -1,0 +1,33 @@
+// Rational Medicine — data model
+// Prisma 7 (driver-adapter setup): no `url` in datasource; URL comes from
+// prisma.config.ts (CLI) and @prisma/adapter-pg (runtime). See src/lib/db.ts.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Article {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  authors   String
+  journal   String?
+  year      String?
+  doi       String?
+  category  String   @default("Evidence-Creating Medicine")
+  abstract  String
+  body      String // markdown — rendered as the article webpage
+  pdfUrl    String?
+  pdfName   String?
+  published Boolean  @default(false)
+  featured  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, createdAt])
+}

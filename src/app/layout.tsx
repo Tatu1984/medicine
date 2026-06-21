@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/content";
-import { SiteHeader } from "@/components/site/SiteHeader";
-import { SiteFooter } from "@/components/site/SiteFooter";
 
 const heading = Bricolage_Grotesque({
   variable: "--font-heading",
@@ -39,9 +37,7 @@ export default function RootLayout({
       <body
         className={`${heading.variable} ${sans.variable} ${mono.variable} flex min-h-full flex-col`}
       >
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
+        {children}
       </body>
     </html>
   );
