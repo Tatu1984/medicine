@@ -61,11 +61,11 @@ export default async function ArticlePage({
         </h2>
         <p className="mt-3 leading-relaxed text-foreground/85">{article.abstract}</p>
 
-        {(article.pdfUrl || article.doi) && (
+        {(article.pdfName || article.doi) && (
           <div className="mt-5 flex flex-wrap gap-3">
-            {article.pdfUrl && (
+            {article.pdfName && (
               <a
-                href={article.pdfUrl}
+                href={`/api/research/${article.id}/pdf`}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-full bg-sage px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"

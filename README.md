@@ -5,8 +5,10 @@ healthcare quality while driving down cost by preventing overdiagnosis and overt
 home for publishing his research.
 
 - **Stack:** Next.js 16 (App Router) · React 19 · Tailwind v4 · shadcn (Base UI) · Prisma 7 +
-  Neon Postgres · Vercel Blob · motion (reactbits-style animations)
+  Neon Postgres · motion (reactbits-style animations)
 - **Design:** "Modern & humane" — warm cream canvas, sage + clay palette
+- **No external services:** research PDFs are stored in Postgres and streamed via an API route;
+  contact messages are stored in the database. Just Next.js + a Postgres database.
 
 ## Public site
 
@@ -21,7 +23,8 @@ downloadable PDF**.
 - `/admin/login` — email + password sign in
 - `/admin` — dashboard (list / publish / unpublish / edit / delete)
 - `/admin/articles/new` & `/admin/articles/[id]/edit` — write the article in Markdown (with live
-  preview) and upload a PDF (stored in Vercel Blob)
+  preview) and upload a PDF (stored in Postgres, served from `/api/research/[id]/pdf`)
+- `/admin/messages` — inbox for the public contact form (mark read / delete)
 
 Access is protected by `src/proxy.ts` (Next.js 16 proxy/middleware) using a signed JWT cookie.
 
@@ -36,7 +39,6 @@ Access is protected by `src/proxy.ts` (Next.js 16 proxy/middleware) using a sign
    - `DATABASE_URL` — your Neon pooled connection string
    - `ADMIN_EMAIL` / `ADMIN_PASSWORD` — the single admin's login
    - `SESSION_SECRET` — any long random string (32+ chars)
-   - `BLOB_READ_WRITE_TOKEN` — from Vercel → Storage → Blob
 
 3. **Create the database tables**:
    ```bash
@@ -49,11 +51,15 @@ Access is protected by `src/proxy.ts` (Next.js 16 proxy/middleware) using a sign
    npm run dev             # http://localhost:3000
    ```
 
-## Deploy (Vercel)
+## Deploy (any Node host)
 
-Set the four env vars in the Vercel project, add a **Blob** store, and use a **Neon** Postgres
-database. The build runs `prisma generate`; run `npm run db:deploy` (or `prisma migrate deploy`)
-against the production database to apply migrations.
+The app is a standard Next.js server with one dependency: a Postgres database. To deploy anywhere
+(a VPS, a container, or a managed Node host):
+
+1. Set the three env vars (`DATABASE_URL`, `ADMIN_EMAIL`/`ADMIN_PASSWORD`, `SESSION_SECRET`).
+2. `npm run build` (runs `prisma generate`).
+3. `npm run db:deploy` to apply migrations to the production database.
+4. `npm run start`.
 
 ## Useful scripts
 

@@ -79,7 +79,7 @@ export default async function AdminDashboard() {
                       )}
                     </td>
                     <td className="hidden px-5 py-4 sm:table-cell">
-                      {a.pdfUrl ? (
+                      {a.pdfName ? (
                         <FileText className="size-4 text-sage" />
                       ) : (
                         <span className="text-xs text-muted-foreground">—</span>

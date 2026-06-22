@@ -22,12 +22,25 @@ model Article {
   category  String   @default("Evidence-Creating Medicine")
   abstract  String
   body      String // markdown — rendered as the article webpage
-  pdfUrl    String?
+  pdfData   Bytes? // the PDF itself, stored in Postgres (no external service)
   pdfName   String?
+  pdfMime   String?
   published Boolean  @default(false)
   featured  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([published, createdAt])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  role      String?
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([read, createdAt])
 }

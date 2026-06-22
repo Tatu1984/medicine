@@ -2,10 +2,9 @@
 
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { upload } from "@vercel/blob/client";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { FileText, Loader2, Upload, X } from "lucide-react";
+import { FileText, Upload, X } from "lucide-react";
 import type { FormState } from "@/app/admin/actions";
 import { RESEARCH_CATEGORIES } from "@/lib/validation";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,6 @@ type Defaults = {
   category?: string;
   abstract?: string;
   body?: string;
-  pdfUrl?: string | null;
   pdfName?: string | null;
   published?: boolean;
   featured?: boolean;
@@ -48,35 +46,9 @@ export function ArticleForm({
   const [state, formAction] = useActionState<FormState, FormData>(action, undefined);
 
   const [body, setBody] = useState(defaults.body ?? "");
-  const [pdfUrl, setPdfUrl] = useState(defaults.pdfUrl ?? "");
-  const [pdfName, setPdfName] = useState(defaults.pdfName ?? "");
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState("");
-
-  async function onPickPdf(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.type !== "application/pdf") {
-      setUploadError("Please choose a PDF file.");
-      return;
-    }
-    setUploadError("");
-    setUploading(true);
-    try {
-      const blob = await upload(file.name, file, {
-        access: "public",
-        handleUploadUrl: "/api/research/upload",
-      });
-      setPdfUrl(blob.url);
-      setPdfName(file.name);
-    } catch (err) {
-      setUploadError(
-        (err as Error).message || "Upload failed. Check the BLOB_READ_WRITE_TOKEN."
-      );
-    } finally {
-      setUploading(false);
-    }
-  }
+  const [pickedName, setPickedName] = useState("");
+  const [removePdf, setRemovePdf] = useState(false);
+  const existingPdf = defaults.pdfName ?? "";
 
   return (
     <form action={formAction} className="grid gap-8 lg:grid-cols-[2fr_1fr]">
@@ -159,42 +131,53 @@ export function ArticleForm({
           </Field>
         </div>
 
-        {/* PDF upload */}
+        {/* PDF upload (stored in the database) */}
         <div className="space-y-3 rounded-2xl border border-border bg-card p-5">
           <Label className="block">PDF download</Label>
-          <input type="hidden" name="pdfUrl" value={pdfUrl} />
-          <input type="hidden" name="pdfName" value={pdfName} />
 
-          {pdfUrl ? (
+          {existingPdf && !removePdf && !pickedName && (
             <div className="flex items-center justify-between gap-3 rounded-xl border border-sage/40 bg-sage-soft/40 p-3">
               <span className="flex min-w-0 items-center gap-2 text-sm">
                 <FileText className="size-4 shrink-0 text-sage-deep" />
-                <span className="truncate">{pdfName || "document.pdf"}</span>
+                <span className="truncate">{existingPdf}</span>
               </span>
               <button
                 type="button"
-                onClick={() => {
-                  setPdfUrl("");
-                  setPdfName("");
-                }}
+                onClick={() => setRemovePdf(true)}
                 className="text-muted-foreground hover:text-destructive"
                 aria-label="Remove PDF"
               >
                 <X className="size-4" />
               </button>
             </div>
-          ) : (
-            <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-dashed border-border bg-background p-6 text-center text-sm text-muted-foreground transition-colors hover:border-sage/50 hover:bg-secondary/40">
-              {uploading ? (
-                <Loader2 className="size-5 animate-spin text-sage" />
-              ) : (
-                <Upload className="size-5 text-sage" />
-              )}
-              <span>{uploading ? "Uploading…" : "Click to upload a PDF"}</span>
-              <input type="file" accept="application/pdf" className="sr-only" onChange={onPickPdf} disabled={uploading} />
-            </label>
           )}
-          {uploadError && <p className="text-xs text-destructive">{uploadError}</p>}
+
+          {removePdf && (
+            <p className="flex items-center justify-between rounded-xl bg-destructive/10 px-3 py-2 text-xs text-destructive">
+              PDF will be removed on save.
+              <button type="button" onClick={() => setRemovePdf(false)} className="font-medium underline">
+                undo
+              </button>
+            </p>
+          )}
+          <input type="hidden" name="removePdf" value={removePdf ? "true" : "false"} />
+
+          <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-dashed border-border bg-background p-6 text-center text-sm text-muted-foreground transition-colors hover:border-sage/50 hover:bg-secondary/40">
+            <Upload className="size-5 text-sage" />
+            <span>{pickedName || (existingPdf && !removePdf ? "Replace PDF" : "Click to choose a PDF")}</span>
+            <input
+              type="file"
+              name="pdf"
+              accept="application/pdf"
+              className="sr-only"
+              onChange={(e) => {
+                setPickedName(e.target.files?.[0]?.name ?? "");
+                if (e.target.files?.[0]) setRemovePdf(false);
+              }}
+            />
+          </label>
+          {pickedName && <p className="truncate text-xs text-sage-deep">Selected: {pickedName}</p>}
+          <p className="text-xs text-muted-foreground">PDF up to 30 MB, stored securely in the database.</p>
         </div>
 
         {/* Status */}

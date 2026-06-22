@@ -22,10 +22,19 @@ export const articleSchema = z.object({
   category: z.enum(RESEARCH_CATEGORIES),
   abstract: z.string().min(20, "Abstract is too short").max(2000),
   body: z.string().min(0).max(60000),
-  pdfUrl: z.string().url().optional().or(z.literal("")),
-  pdfName: z.string().optional().or(z.literal("")),
   published: z.boolean(),
   featured: z.boolean(),
 });
 
 export type ArticleInput = z.infer<typeof articleSchema>;
+
+export const MAX_PDF_BYTES = 30 * 1024 * 1024; // 30 MB
+
+export const contactSchema = z.object({
+  name: z.string().min(2, "Please enter your name").max(120),
+  email: z.string().email("Please enter a valid email"),
+  role: z.string().max(160).optional().or(z.literal("")),
+  message: z.string().min(10, "Please add a little more detail").max(4000),
+});
+
+export type ContactInput = z.infer<typeof contactSchema>;

@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { Mail, AtSign, BookOpen } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { Reveal } from "@/components/reactbits/Reveal";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { ContactForm } from "./ContactForm";
 import { site } from "@/lib/content";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Get in touch with the Rational Medicine Network.",
+};
 
 const channels = [
   { icon: AtSign, label: "Twitter / X", value: site.twitter, href: `https://twitter.com/${site.twitter.replace("@", "")}` },
@@ -26,32 +28,7 @@ export default function ContactPage() {
       <section className="container-page py-16 sm:py-20">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
           <Reveal>
-            <form className="rounded-3xl border border-border bg-card p-8 sm:p-10">
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input id="name" placeholder="Dr Jane Doe" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="you@example.com" />
-                </div>
-              </div>
-              <div className="mt-5 space-y-2">
-                <Label htmlFor="role">Role / affiliation</Label>
-                <Input id="role" placeholder="e.g. GP, physiotherapist, researcher" />
-              </div>
-              <div className="mt-5 space-y-2">
-                <Label htmlFor="message">How would you like to contribute?</Label>
-                <Textarea id="message" rows={5} placeholder="Tell us a little about your interest in Rational Medicine…" />
-              </div>
-              <Button type="submit" size="lg" className="mt-6 rounded-full">
-                Send message
-              </Button>
-              <p className="mt-3 text-xs text-muted-foreground">
-                Demo form — not yet wired to a backend.
-              </p>
-            </form>
+            <ContactForm />
           </Reveal>
 
           <Reveal delay={0.1}>

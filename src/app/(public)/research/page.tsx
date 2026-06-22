@@ -54,9 +54,9 @@ export default async function ResearchPage() {
                     >
                       Read article <ArrowUpRight className="size-4" />
                     </Link>
-                    {a.pdfUrl && (
+                    {a.pdfName && (
                       <a
-                        href={a.pdfUrl}
+                        href={`/api/research/${a.id}/pdf`}
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-sm font-medium text-foreground/80 transition-colors hover:border-sage/50 hover:text-sage-deep"
