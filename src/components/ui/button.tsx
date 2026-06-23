@@ -56,7 +56,7 @@ function Button({
   // single child element (e.g. a Next.js <Link>) is rendered as the button.
   if (asChild && React.isValidElement(children)) {
     return (
-      <ButtonPrimitive data-slot="button" className={classes} render={children} {...props} />
+      <ButtonPrimitive data-slot="button" className={classes} render={children} nativeButton={false} {...props} />
     )
   }
 
