@@ -71,6 +71,8 @@ export function ArticleForm({
           <p className="mb-2 text-xs text-muted-foreground">
             Markdown supported — headings, lists, links, tables. This renders as the public webpage.
           </p>
+          {/* Hidden input always carries the body value regardless of active tab */}
+          <input type="hidden" name="body" value={body} />
           <Tabs defaultValue="write">
             <TabsList>
               <TabsTrigger value="write">Write</TabsTrigger>
@@ -78,7 +80,6 @@ export function ArticleForm({
             </TabsList>
             <TabsContent value="write">
               <Textarea
-                name="body"
                 rows={16}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
