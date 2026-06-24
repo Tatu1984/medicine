@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FaFacebook, FaInstagram, FaXTwitter } from "react-icons/fa6";
 import { nav, site } from "@/lib/content";
 import { Logo } from "./Logo";
 
@@ -17,7 +18,7 @@ export function SiteFooter() {
           <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
             Explore
           </h4>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5">
             {nav.map((item) => (
               <li key={item.href}>
                 <Link
@@ -37,21 +38,33 @@ export function SiteFooter() {
           </h4>
           <ul className="mt-4 space-y-2.5 text-sm text-foreground/80">
             <li>
-              <a href={`https://twitter.com/${site.twitter.replace("@", "")}`} className="transition-colors hover:text-clay">
-                {site.twitter}
-              </a>
+              <Link href="/about" className="transition-colors hover:text-clay">
+                {site.author}
+              </Link>
             </li>
             <li>
               <a href={`https://orcid.org/${site.orcid}`} className="transition-colors hover:text-clay">
                 ORCID {site.orcid}
               </a>
             </li>
-            <li>
-              <Link href="/about" className="transition-colors hover:text-clay">
-                {site.author}
-              </Link>
-            </li>
           </ul>
+          <div className="mt-5 flex items-center gap-4">
+            <span className="text-muted-foreground/40 cursor-not-allowed">
+              <FaFacebook className="size-5" />
+            </span>
+            <a
+              href={`https://twitter.com/${site.twitter.replace("@", "")}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-foreground/70 transition-colors hover:text-clay"
+              aria-label="Twitter / X"
+            >
+              <FaXTwitter className="size-5" />
+            </a>
+            <span className="text-muted-foreground/40 cursor-not-allowed">
+              <FaInstagram className="size-5" />
+            </span>
+          </div>
         </div>
       </div>
 

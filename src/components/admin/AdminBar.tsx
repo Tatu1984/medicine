@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Inbox, LogOut, Plus } from "lucide-react";
+import { Inbox, LayoutGrid, LogOut, Plus } from "lucide-react";
 import { Logo } from "@/components/site/Logo";
 import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/app/admin/actions";
@@ -21,8 +21,13 @@ export async function AdminBar({ showNew = true }: { showNew?: boolean }) {
         </div>
         <div className="flex items-center gap-2">
           <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Link href="/admin/content">
+              <LayoutGrid className="size-4" /> Content
+            </Link>
+          </Button>
+          <Button asChild variant="ghost" size="sm" className="rounded-full">
             <Link href="/admin/messages">
-              <Inbox className="size-4" /> Messages
+              <Inbox className="size-4" /> Inbox
               {unread > 0 && (
                 <span className="ml-1 inline-flex min-w-5 items-center justify-center rounded-full bg-clay px-1.5 text-[11px] font-semibold text-white">
                   {unread}

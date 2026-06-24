@@ -33,6 +33,12 @@ model Article {
   @@index([published, createdAt])
 }
 
+model SiteContent {
+  key       String   @id // "home" | "pillars" | "network" | "resources" | "about"
+  data      Json
+  updatedAt DateTime @updatedAt
+}
+
 model ContactMessage {
   id        String   @id @default(cuid())
   name      String

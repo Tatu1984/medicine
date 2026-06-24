@@ -1,9 +1,9 @@
 import { Reveal } from "@/components/reactbits/Reveal";
 import { SectionHeading } from "@/components/site/SectionHeading";
-import { movements } from "@/lib/content";
 import { GitMerge } from "lucide-react";
+import type { Movement } from "@/lib/site-content";
 
-export function Movements() {
+export function Movements({ movements }: { movements: Movement[] }) {
   return (
     <section className="container-page py-20 sm:py-28">
       <SectionHeading

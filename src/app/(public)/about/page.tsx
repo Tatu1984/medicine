@@ -2,14 +2,21 @@ import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { Reveal } from "@/components/reactbits/Reveal";
-import { about } from "@/lib/content";
+import { getAboutContent } from "@/lib/site-content";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: `${about.name} — ${about.role}`,
-};
+export const dynamic = "force-dynamic";
 
-export default function AboutPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const about = await getAboutContent();
+  return {
+    title: "About",
+    description: `${about.name} — ${about.role}`,
+  };
+}
+
+export default async function AboutPage() {
+  const about = await getAboutContent();
+
   return (
     <>
       <PageHero
@@ -54,9 +61,9 @@ export default function AboutPage() {
               ))}
 
               <blockquote className="mt-8 rounded-3xl border-l-4 border-clay bg-secondary/50 p-7 text-lg italic leading-relaxed text-foreground/80">
-                “The doctor’s role must be defined by what is in the best interest of patients and of
+                "The doctor's role must be defined by what is in the best interest of patients and of
                 the population served — drawing on scientific knowledge and well-developed clinical
-                judgement.”
+                judgement."
               </blockquote>
             </div>
           </Reveal>

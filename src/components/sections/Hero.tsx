@@ -7,15 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Aurora } from "@/components/reactbits/Aurora";
 import { BlurText } from "@/components/reactbits/BlurText";
 import { GradientText } from "@/components/reactbits/GradientText";
-import { definition } from "@/lib/content";
-
 const chips = [
   { icon: Stethoscope, label: "Rational clinical examination" },
   { icon: ShieldCheck, label: "Preventing overdiagnosis" },
   { icon: Scale, label: "Honest, conflict-free evidence" },
 ];
 
-export function Hero() {
+export function Hero({ definition }: { definition: string }) {
   return (
     <section id="idea" className="relative overflow-hidden pt-20 pb-24 sm:pt-28">
       <Aurora />

@@ -1,8 +1,8 @@
 import { Counter } from "@/components/reactbits/Counter";
 import { Reveal } from "@/components/reactbits/Reveal";
-import { stats } from "@/lib/content";
+import type { Stat } from "@/lib/site-content";
 
-export function StatsBand() {
+export function StatsBand({ stats }: { stats: Stat[] }) {
   return (
     <section className="border-y border-border/70 bg-sage-deep text-primary-foreground">
       <div className="container-page grid grid-cols-2 gap-8 py-14 lg:grid-cols-4">

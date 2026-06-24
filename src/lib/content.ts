@@ -20,6 +20,7 @@ export const nav = [
   { label: "Network", href: "/network" },
   { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 /** The headline definition, used in the hero. */

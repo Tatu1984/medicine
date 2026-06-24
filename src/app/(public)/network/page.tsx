@@ -3,7 +3,9 @@ import { CheckCircle2 } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { Reveal } from "@/components/reactbits/Reveal";
 import { JoinCTA } from "@/components/sections/JoinCTA";
-import { network } from "@/lib/content";
+import { getNetworkContent } from "@/lib/site-content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "The Network",
@@ -11,7 +13,9 @@ export const metadata: Metadata = {
     "The Rational Medicine Network and the Evidence-Creating Medicine Group — community-based, conflict-free healthcare.",
 };
 
-export default function NetworkPage() {
+export default async function NetworkPage() {
+  const network = await getNetworkContent();
+
   return (
     <>
       <PageHero

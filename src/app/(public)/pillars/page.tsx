@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/site/PageHero";
 import { PillarCard } from "@/components/site/PillarCard";
 import { JoinCTA } from "@/components/sections/JoinCTA";
-import { pillars } from "@/lib/content";
+import { getPillars } from "@/lib/site-content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "The Six Pillars",
@@ -10,7 +12,9 @@ export const metadata: Metadata = {
     "The six movements that together form Rational Medicine — from universal healthcare to evidence-creating medicine.",
 };
 
-export default function PillarsPage() {
+export default async function PillarsPage() {
+  const pillars = await getPillars();
+
   return (
     <>
       <PageHero

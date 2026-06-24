@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
-import { resources, type Resource } from "@/lib/content";
+import type { Resource } from "@/lib/site-content";
 
 const categories = ["All", "Foundations", "Overdiagnosis", "Evidence", "Bedside", "Education"] as const;
 type Cat = (typeof categories)[number];
 
-export function ResourceGrid() {
+export function ResourceGrid({ resources }: { resources: Resource[] }) {
   const [active, setActive] = useState<Cat>("All");
   const filtered: Resource[] =
     active === "All" ? resources : resources.filter((r) => r.category === active);
