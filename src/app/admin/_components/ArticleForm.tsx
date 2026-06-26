@@ -4,7 +4,7 @@ import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { FileText, Upload, X } from "lucide-react";
+import { FileText, Loader2, Upload, X } from "lucide-react";
 import type { FormState } from "@/app/admin/actions";
 import { RESEARCH_CATEGORIES } from "@/lib/validation";
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,44 @@ export function ArticleForm({
   const [body, setBody] = useState(defaults.body ?? "");
   const [pickedName, setPickedName] = useState("");
   const [removePdf, setRemovePdf] = useState(false);
+  const [extracting, setExtracting] = useState(false);
   const existingPdf = defaults.pdfName ?? "";
+
+  async function handlePdfChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPickedName(file.name);
+    setRemovePdf(false);
+
+    setExtracting(true);
+    try {
+      const pdfjsLib = await import("pdfjs-dist");
+      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+      const pages: string[] = [];
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        const pageText = content.items
+          .map((item) => ("str" in item ? item.str : ""))
+          .join(" ")
+          .replace(/\s+/g, " ")
+          .trim();
+        if (pageText) pages.push(pageText);
+      }
+
+      if (pages.length > 0) {
+        setBody(pages.join("\n\n"));
+      }
+    } catch (err) {
+      console.error("[PDF extract]", err);
+    } finally {
+      setExtracting(false);
+    }
+  }
 
   return (
     <form action={formAction} className="grid gap-8 lg:grid-cols-[2fr_1fr]">
@@ -164,21 +201,26 @@ export function ArticleForm({
           <input type="hidden" name="removePdf" value={removePdf ? "true" : "false"} />
 
           <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-dashed border-border bg-background p-6 text-center text-sm text-muted-foreground transition-colors hover:border-sage/50 hover:bg-secondary/40">
-            <Upload className="size-5 text-sage" />
-            <span>{pickedName || (existingPdf && !removePdf ? "Replace PDF" : "Click to choose a PDF")}</span>
+            {extracting
+              ? <Loader2 className="size-5 animate-spin text-sage" />
+              : <Upload className="size-5 text-sage" />}
+            <span>
+              {extracting
+                ? "Extracting text from PDF…"
+                : pickedName || (existingPdf && !removePdf ? "Replace PDF" : "Click to choose a PDF")}
+            </span>
             <input
               type="file"
               name="pdf"
               accept="application/pdf"
               className="sr-only"
-              onChange={(e) => {
-                setPickedName(e.target.files?.[0]?.name ?? "");
-                if (e.target.files?.[0]) setRemovePdf(false);
-              }}
+              onChange={handlePdfChange}
             />
           </label>
-          {pickedName && <p className="truncate text-xs text-sage-deep">Selected: {pickedName}</p>}
-          <p className="text-xs text-muted-foreground">PDF up to 30 MB, stored securely in the database.</p>
+          {pickedName && !extracting && (
+            <p className="truncate text-xs text-sage-deep">Selected: {pickedName} — body auto-filled from PDF</p>
+          )}
+          <p className="text-xs text-muted-foreground">PDF up to 30 MB — text is auto-extracted into the article body.</p>
         </div>
 
         {/* Status */}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MapPin, Phone, Clock } from "lucide-react";
 import { FaFacebook, FaInstagram, FaXTwitter } from "react-icons/fa6";
 import { nav, site } from "@/lib/content";
 import { Logo } from "./Logo";
@@ -6,7 +7,7 @@ import { Logo } from "./Logo";
 export function SiteFooter() {
   return (
     <footer className="border-t border-border/70 bg-secondary/40">
-      <div className="container-page grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr]">
+      <div className="container-page grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="max-w-sm">
           <Logo />
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -29,6 +30,26 @@ export function SiteFooter() {
                 </Link>
               </li>
             ))}
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            Find Us
+          </h4>
+          <ul className="mt-4 space-y-3 text-sm text-foreground/80">
+            <li className="flex items-start gap-2">
+              <MapPin className="mt-0.5 size-4 shrink-0 text-sage" />
+              <span>Birmingham, B9 5SS<br /><span className="text-muted-foreground">Europe</span></span>
+            </li>
+            <li className="flex items-center gap-2">
+              <Phone className="size-4 shrink-0 text-sage" />
+              <a href="tel:+447780971921" className="transition-colors hover:text-clay">+44 7780 971921</a>
+            </li>
+            <li className="flex items-center gap-2">
+              <Clock className="size-4 shrink-0 text-sage" />
+              <span>Open 24 hours</span>
+            </li>
           </ul>
         </div>
 
