@@ -70,9 +70,15 @@ export function SiteFooter() {
             </li>
           </ul>
           <div className="mt-5 flex items-center gap-4">
-            <span className="text-muted-foreground/40 cursor-not-allowed">
+            <a
+              href="https://www.facebook.com/profile.php?id=61591265617005"
+              target="_blank"
+              rel="noreferrer"
+              className="text-foreground/70 transition-colors hover:text-clay"
+              aria-label="Facebook"
+            >
               <FaFacebook className="size-5" />
-            </span>
+            </a>
             <a
               href={`https://twitter.com/${site.twitter.replace("@", "")}`}
               target="_blank"
@@ -82,9 +88,15 @@ export function SiteFooter() {
             >
               <FaXTwitter className="size-5" />
             </a>
-            <span className="text-muted-foreground/40 cursor-not-allowed">
+            <a
+              href="https://www.instagram.com/rational.medicine/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-foreground/70 transition-colors hover:text-clay"
+              aria-label="Instagram"
+            >
               <FaInstagram className="size-5" />
-            </span>
+            </a>
           </div>
         </div>
       </div>
